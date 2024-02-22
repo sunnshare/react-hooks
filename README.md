@@ -12,5 +12,11 @@
 
 ### useCallback
 
-- params (() => fn, [deps])，return fn
+- params (() => fn, [deps])，return () => fn
 - 与 useMemo 实现基本一致
+
+### useEffect
+
+- params (callback, [deps])，return callback()
+- 初始以 [callback(), [deps]]形式 缓存在 hookStates 中
+- 读取时比较前后 deps 的变化，发生改变则调用 destroy 函数，重新缓存销毁函数和依赖
