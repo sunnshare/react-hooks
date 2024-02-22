@@ -20,3 +20,7 @@
 - params (callback, [deps])，return callback()
 - 初始以 [callback(), [deps]]形式 缓存在 hookStates 中
 - 读取时比较前后 deps 的变化，发生改变则调用 destroy 函数，重新缓存销毁函数和依赖
+
+### useLayoutEffect
+
+- 与 useEffect 基本一致，useEffect 用的是宏任务，useLayoutEffect 用的是微任务

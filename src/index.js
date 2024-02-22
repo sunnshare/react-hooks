@@ -2,7 +2,8 @@ import ReactDOM from "react-dom/client";
 
 // import { App } from "./useState";
 // import { App } from "./useMemo";
-import { App } from "./useEffect";
+// import { App } from "./useEffect";
+import { App } from "./useLayoutEffect";
 
 let hookIndex = 0;
 let hookStates = [];
@@ -71,13 +72,50 @@ export function useEffect(callback, dependencies) {
 			hookIndex++;
 		} else {
 			lastDestroy && lastDestroy();
-			const destroy = callback();
-			hookStates[hookIndex++] = [destroy, dependencies];
+			let arr = [null, dependencies];
+			setTimeout(() => {
+				arr[0] = callback();
+			});
+			hookStates[hookIndex++] = arr;
 		}
 	} else {
-		const destroy = callback();
-		hookStates[hookIndex++] = [destroy, dependencies];
+		let arr = [null, dependencies];
+		setTimeout(() => {
+			arr[0] = callback();
+		});
+		hookStates[hookIndex++] = arr;
 	}
+}
+
+export function useLayoutEffect(callback, dependencies) {
+	if (hookStates[hookIndex]) {
+		let [lastDestroy, lastDependencies] = hookStates[hookIndex];
+		let same = false;
+		if (lastDependencies) {
+			same = dependencies.every((item, index) => item === lastDependencies[index]);
+		}
+		if (same) {
+			hookIndex++;
+		} else {
+			lastDestroy && lastDestroy();
+			let arr = [null, dependencies];
+			queueMicrotask(() => {
+				arr[0] = callback();
+			});
+			hookStates[hookIndex++] = arr;
+		}
+	} else {
+		let arr = [null, dependencies];
+		queueMicrotask(() => {
+			arr[0] = callback();
+		});
+		hookStates[hookIndex++] = arr;
+	}
+}
+
+export function useRef(initialState) {
+	hookStates[hookIndex] = hookStates[hookIndex] || { current: initialState };
+	return hookStates[hookIndex++];
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
