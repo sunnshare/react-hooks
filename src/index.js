@@ -4,7 +4,8 @@ import ReactDOM from "react-dom/client";
 // import { App } from "./useMemo";
 // import { App } from "./useEffect";
 // import { App } from "./useLayoutEffect";
-import { App } from "./useReducer";
+// import { App } from "./useReducer";
+import { App } from "./useContext";
 
 let hookIndex = 0;
 let hookStates = [];
@@ -117,10 +118,14 @@ export function useReducer(reducer, initialState) {
 
 	let currentIndex = hookIndex;
 	function dispatch(action) {
-		hookStates[currentIndex] = reducer ? reducer(hookStates[currentIndex], action) : initialState;
+		hookStates[currentIndex] = reducer ? reducer(hookStates[currentIndex], action) : action;
 		render();
 	}
 	return [hookStates[hookIndex++], dispatch];
+}
+
+export function useContext(context) {
+	return context._currentValue;
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

@@ -28,3 +28,7 @@
 ### useReducer
 
 - 与 useState 基本一致，在 hookStates 中记录了一个 reducer(state,action)
+
+### useContext
+
+- React.createContext() 会返回一个 context 将数据挂载到 \_currentValue 上
