@@ -5,7 +5,8 @@ import ReactDOM from "react-dom/client";
 // import { App } from "./useEffect";
 // import { App } from "./useLayoutEffect";
 // import { App } from "./useReducer";
-import { App } from "./useContext";
+// import { App } from "./useContext";
+import { App } from "./useImperativeHandle";
 
 let hookIndex = 0;
 let hookStates = [];
@@ -126,6 +127,10 @@ export function useReducer(reducer, initialState) {
 
 export function useContext(context) {
 	return context._currentValue;
+}
+
+export function useImperativeHandle(ref, handle) {
+	ref.current = handle();
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
