@@ -24,3 +24,7 @@
 ### useLayoutEffect
 
 - 与 useEffect 基本一致，useEffect 用的是宏任务，useLayoutEffect 用的是微任务
+
+### useReducer
+
+- 与 useState 基本一致，在 hookStates 中记录了一个 reducer(state,action)

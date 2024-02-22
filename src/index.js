@@ -3,20 +3,14 @@ import ReactDOM from "react-dom/client";
 // import { App } from "./useState";
 // import { App } from "./useMemo";
 // import { App } from "./useEffect";
-import { App } from "./useLayoutEffect";
+// import { App } from "./useLayoutEffect";
+import { App } from "./useReducer";
 
 let hookIndex = 0;
 let hookStates = [];
 
-export function useState(initState) {
-	hookStates[hookIndex] = hookStates[hookIndex] || initState;
-
-	let currentIndex = hookIndex;
-	function setState(newValue) {
-		hookStates[currentIndex] = newValue;
-		render();
-	}
-	return [hookStates[hookIndex++], setState];
+export function useState(initialState) {
+	return useReducer(null, initialState);
 }
 
 export function useMemo(factory, dependencies) {
@@ -116,6 +110,17 @@ export function useLayoutEffect(callback, dependencies) {
 export function useRef(initialState) {
 	hookStates[hookIndex] = hookStates[hookIndex] || { current: initialState };
 	return hookStates[hookIndex++];
+}
+
+export function useReducer(reducer, initialState) {
+	hookStates[hookIndex] = hookStates[hookIndex] || initialState;
+
+	let currentIndex = hookIndex;
+	function dispatch(action) {
+		hookStates[currentIndex] = reducer ? reducer(hookStates[currentIndex], action) : initialState;
+		render();
+	}
+	return [hookStates[hookIndex++], dispatch];
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
